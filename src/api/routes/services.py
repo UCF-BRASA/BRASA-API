@@ -1,23 +1,24 @@
-
-
 from fastapi import APIRouter, HTTPException
 
-from models.prediction import TestResponse, TestRequest
+from core.config import app_tags_metadata
+from schemas.prediction import TestRequest, TestResponse
 
+app_tags_metadata.append({"name": "Services", "description": "Service Tag Description"})
+router = APIRouter(prefix="/services", tags=["Services"])
 
-router = APIRouter(prefix='/services', tags=['Services'])
 
 @router.get(
-    "/add",
+    path="/add",
     response_model=TestResponse,
-    name="This name shows:in the auto-generated SwaggerHubs docs",
+    name="Test endpoint",
 )
-async def mama(data_input: TestRequest):
+async def mama(body: TestRequest):
     try:
-        name = data_input.name
-        other = data_input.other
+        return TestResponse(
+            salve=f"""Service Endpoint!
+            name={body.name}
+            other={body.other}"""
+        )
 
-        return TestResponse(salve=f'name={name} -> other={other}')
-    
     except Exception:
         raise HTTPException(status_code=404, detail="Some Exception")
