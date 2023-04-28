@@ -7,7 +7,7 @@ WORKDIR /src
 # Copy poetry files
 COPY pyproject.toml poetry.lock ./
 
-COPY .env ./
+# COPY .env ./
 
 # Install poetry
 RUN pip install --upgrade pip \
