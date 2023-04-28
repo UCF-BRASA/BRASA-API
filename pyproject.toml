@@ -13,6 +13,7 @@ uvicorn = "^0.20.0"
 pymongo = "^4.3.3"
 motor = "^3.1.2"
 beanie = "^1.18.0"
+pydantic = {extras = ["dotenv"], version = "^1.10.7"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.0"

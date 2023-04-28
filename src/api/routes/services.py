@@ -1,23 +1,33 @@
-from fastapi import APIRouter, HTTPException
+from datetime import datetime
 
-from core.config import app_tags_metadata
-from schemas.prediction import TestRequest, TestResponse
+from fastapi import APIRouter, HTTPException, status
 
-app_tags_metadata.append({"name": "Services", "description": "Service Tag Description"})
+from core.config import settings
+from core.constants import SUCCESS
+from models.base import Response
+from models.services import UpdateServiceModel
+
+# from schemas.prediction import TestRequest, TestResponse
+
+
+settings.app_tags_metadata.append(
+    {"name": "Services", "description": "Service Tag Description"}
+)
 router = APIRouter(prefix="/services", tags=["Services"])
 
 
 @router.get(
     path="/add",
-    response_model=TestResponse,
+    response_model=Response,
     name="Test endpoint",
 )
-async def mama(body: TestRequest):
+async def mama(body: UpdateServiceModel):
     try:
-        return TestResponse(
-            salve=f"""Service Endpoint!
-            name={body.name}
-            other={body.other}"""
+        return Response(
+            status_code=status.HTTP_200_OK,
+            response_type=SUCCESS,
+            description="Successfully got a service",
+            data=datetime.now().strftime("%Hh:%Mm:%Ss"),
         )
 
     except Exception:
