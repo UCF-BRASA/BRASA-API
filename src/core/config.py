@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     # setting DEBUG setting
     DEBUG: bool = True if POETRY_ENV == "development" else False
 
+    # get the app's port
+    PORT: int = envVariables("PORT", cast=int, default=8080)
+
     # getting DB env info
     DB_URI: str = envVariables("DB_URI", cast=str)
     DB_USERNAME: str = envVariables("DB_USERNAME", cast=str)
