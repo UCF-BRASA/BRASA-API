@@ -1,119 +1,71 @@
-# BRASA Backend - API built with FastAPI
+<div align="center">
+  <br>
+  <img alt="Open Sauced" src="https://cdn.discordapp.com/attachments/980268278284976189/1093756002282766436/PNG-brasa-logo_1.png" width="300px">
+  <h1> 🇧🇷 BRASA API 🇧🇷</h1>
+  <strong>🧑‍💻 UCF BRASA's student created API 🧑‍💻 </strong>
+</div>
 
+## 📖 Prerequisites
 
-## Development Requirements
+### Tools/Technologies (required)
+- [Python@3.11](https://www.python.org/downloads/)
+- [Poetry](https://python-poetry.org/docs/#installation)
+- [MongoDBCompass](https://www.mongodb.com/try/download/compass) or [MongoDB VSC Extension](https://marketplace.visualstudio.com/items?itemName=mongodb.mongodb-vscode)
 
-- [Python](https://www.python.org/downloads/)
-- [Pip](https://pip.pypa.io/en/stable/installation/)
-- [Poetry (Python Package Manager)](https://python-poetry.org/docs/#installing-with-the-official-installer)
-- [FastAPI](https://fastapi.tiangolo.com)
-- [MongoDB](https://www.mongodb.com)
+### VSC Extensions (recommended)
+- [Black](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter)
+- [Flake8](https://marketplace.visualstudio.com/items?itemName=ms-python.flake8)
+- [isort](https://marketplace.visualstudio.com/items?itemName=ms-python.isort)
+- [Python Indent](https://marketplace.visualstudio.com/items?itemName=KevinRose.vsc-python-indent) 
+- [BetterTOML](https://marketplace.visualstudio.com/items?itemName=bungcip.better-toml)
+- [ENV](https://marketplace.visualstudio.com/items?itemName=IronGeek.vscode-env)
 
+### Environment Variables file (required)
+Before running the app, you need to fill out the `.env` file. Please reach out to either:
+  - [Fachetti (EniGzz#0011)](https://discordapp.com/users/294195589820710912)
+  - [Duda (Joazeiro#0815)](https://discordapp.com/users/401588155788296194)
+  
+<br>
 
-## Installation
+## 🖥️ Local development
+### Installing
+Run the following command to install all the project dependencies.
 
-```sh
-python -m venv venv
-source venv/bin/activate
-make install
+```shell
+poetry install
 ```
 
-## Runnning Localhost
+```shell
+poetry run pre-commit install
+```
 
-`uvicorn main:app --reload --host 0.0.0.0 --port 8080`
+### Running
+```shell
+poetry run start
+```
+The application will be available at [https://localhost:8080](http://localhost:8080)
 
-## Deploy app
+## 🧪 Test
 
-`make deploy`
+For running the unit test suite, use the following command: 
 
-## Running Tests
+```shell
+poetry run pytest
+```
 
-`make test`
+## Built With 🧰
 
-## Access Swagger Documentation
+  - [FastAPI](https://fastapi.tiangolo.com/) - The API framework used
+  - [MongoDB](https://www.mongodb.com) - NoSQL database
+  - [Beanie](https://beanie-odm.dev) - Database ODM (Object Document Mapper)
+  - [Poetry](https://python-poetry.org) - Dependency and virtual environment manager
+  - [Flake8](https://flake8.pycqa.org/en/latest/) - Code Linter
+  - [Black](https://black.readthedocs.io/en/stable/) - Code Formatter
 
-> <http://localhost:8080/docs>
+## Deployment
 
-## Access Redocs Documentation
+We are using [Railway🚅](https://railway.app) to deploy our app using `uvicorn`.
 
-> <http://localhost:8080/redoc>
+## License
 
-## Project structure
-
-Files related to application are in the `app` or `tests` directories.
-Application parts are:
-
-    app
-    |
-    | # Fast-API stuff
-    ├── api                 - web related stuff.
-    │   └── routes          - web routes.
-    ├── core                - application configuration, startup events, logging.
-    ├── models              - pydantic models for this application.
-    ├── services            - logic that is not just crud related.
-    ├── main-aws-lambda.py  - [Optional] FastAPI application for AWS Lambda creation and configuration.
-    └── main.py             - FastAPI application creation and configuration.
-    |
-    | # ML stuff
-    ├── data             - where you persist data locally
-    │   ├── interim      - intermediate data that has been transformed.
-    │   ├── processed    - the final, canonical data sets for modeling.
-    │   └── raw          - the original, immutable data dump.
-    │
-    ├── notebooks        - Jupyter notebooks. Naming convention is a number (for ordering),
-    |
-    ├── ml               - modelling source code for use in this project.
-    │   ├── __init__.py  - makes ml a Python module
-    │   ├── pipeline.py  - scripts to orchestrate the whole pipeline
-    │   │
-    │   ├── data         - scripts to download or generate data
-    │   │   └── make_dataset.py
-    │   │
-    │   ├── features     - scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   └── model        - scripts to train models and make predictions
-    │       ├── predict_model.py
-    │       └── train_model.py
-    │
-    └── tests            - pytest
-
-## GCP
-Deploying inference service to Cloud Run
-
-### Authenticate
-
-1. Install `gcloud` cli
-2. `gcloud auth login`
-3. `gcloud config set project <PROJECT_ID>`
-
-### Enable APIs
-
-1. Cloud Run API
-2. Cloud Build API
-3. IAM API
-
-### Deploy to Cloud Run
-
-1. Run `gcp-deploy.sh`
-
-### Clean up
-
-1. Delete Cloud Run
-2. Delete Docker image in GCR
-
-## AWS
-Deploying inference service to AWS Lambda
-
-### Authenticate
-
-1. Install `awscli` and `sam-cli`
-2. `aws configure`
-
-### Deploy to Lambda
-
-1. Run `sam build`
-2. Run `sam deploy --guiChange this portion for other types of models
-## Add the correct type hinting when completed
-
-`aws cloudformation delete-stack --stack-name <STACK_NAME_ON_CREATION>`
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
