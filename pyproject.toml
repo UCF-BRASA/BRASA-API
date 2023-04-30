@@ -16,12 +16,13 @@ beanie = "^1.18.0"
 pydantic = {extras = ["dotenv"], version = "^1.10.7"}
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.3.0"
+pytest = "^7.3.1"
 flake8 = "^6.0.0"
 tox = "^4.4.11"
 pre-commit = "^3.2.2"
 black = "^23.3.0"
 mypy = "^1.2.0"
+httpx = "^0.24.0"
 
 [tool.poetry.scripts]
 start = "main:start_server"
