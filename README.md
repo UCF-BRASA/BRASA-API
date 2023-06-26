@@ -24,8 +24,7 @@
 Before running the app, you need to fill out the `.env` file. Please reach out to either:
   - [Fachetti (EniGzz#0011)](https://discordapp.com/users/294195589820710912)
   - [Duda (Joazeiro#0815)](https://discordapp.com/users/401588155788296194)
-  
-<br>
+
 
 ## 🖥️ Local development
 ### Installing
@@ -45,6 +44,15 @@ poetry run start
 ```
 The application will be available at [https://localhost:8080](http://localhost:8080)
 
+
+## 📓 Documentation
+### Swagger Docs
+> https://brasa-api.up.railway.app/docs
+
+### Redoc Docs
+> https://brasa-api.up.railway.app/redoc
+
+
 ## 🧪 Test
 
 For running the unit test suite, use the following command: 
@@ -53,7 +61,7 @@ For running the unit test suite, use the following command:
 poetry run pytest
 ```
 
-## Built With 🧰
+## 🧰 Built With
 
   - [FastAPI](https://fastapi.tiangolo.com/) - The API framework used
   - [MongoDB](https://www.mongodb.com) - NoSQL database
