@@ -62,7 +62,7 @@ docs/_build/
 target/
 
 # DotEnv configuration
-.env
+*.env
 
 # Database
 *.db
@@ -72,7 +72,7 @@ target/
 .idea
 
 # VS Code
-.vscode/
+# .vscode/
 
 # Spyder
 .spyproject/
@@ -92,3 +92,4 @@ target/
 
 # Mypy cache
 .mypy_cache/
+.pytest_cache/

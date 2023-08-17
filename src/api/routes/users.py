@@ -1,23 +1,37 @@
-from fastapi import APIRouter, HTTPException
+# from datetime import datetime
 
-from core.config import app_tags_metadata
-from schemas.prediction import TestRequest, TestResponse
+from fastapi import APIRouter, HTTPException, status
 
-app_tags_metadata.append({"name": "Users", "description": "Users Tag Description"})
+from core.config import settings
+from core.constants import SUCCESS
+from db.operations import add_student
+
+# from models.base import Response
+from models.user import User, UserResponse
+
+settings.app_tags_metadata.append(
+    {"name": "Users", "description": "Users Tag Description"}
+)
 router: APIRouter = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.post(
     path="/add",
-    response_model=TestResponse,
+    response_model=UserResponse,
     name="Adds a user",
 )
-async def add(body: TestRequest):
+async def add(body: User):
     try:
-        name = body.name
-        other = body.other
+        new_user = await add_student(body)
 
-        return TestResponse(salve=f"name={name} -> other={other}")
+        return UserResponse(
+            status_code=status.HTTP_200_OK,
+            response_type=SUCCESS,
+            description="Successfully added a user",
+            data=new_user,
+        )
 
     except Exception:
-        raise HTTPException(status_code=404, detail="Some Exception")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Some Exception"
+        )
