@@ -35,6 +35,11 @@ class Settings(BaseSettings):
     # setting the URI completely
     DB_COMPLETE_URI: str = DB_URI % (DB_USERNAME, DB_PASSWORD)
 
+    # auth constants
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    AUTH_SECRET_KEY: str = envVariables("AUTH_SECRET_KEY", cast=str)
+    ALGORITHM: str = envVariables("ALGORITHM", cast=str)
+
     class Config:
         env_file = ".env"
 

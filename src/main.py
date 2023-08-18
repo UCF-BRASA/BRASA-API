@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
+from api.routes.authentication import AuthHandler
 from api.routes.base import hello_world_router
 from api.routes.base import router as api_router
 from core.config import settings
@@ -33,3 +34,9 @@ app: FastAPI = get_application()
 @app.on_event(event_type="startup")
 async def start_database():
     await initiate_database()
+
+
+@app.on_event(event_type="startup")
+async def start_auth_service():
+    auth_handler = AuthHandler()
+    return auth_handler
