@@ -1,5 +1,3 @@
-# auth.py
-
 from datetime import datetime, timedelta
 
 import jwt
@@ -42,3 +40,11 @@ class AuthHandler:
 
     def auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
         return self.decode_token(auth.credentials)
+
+
+def checkUCFEmail(user_email) -> bool:
+    domain = user_email.split("@")[1]
+    if domain == settings.UCF_DOMAIN:
+        return True
+
+    return False

@@ -40,6 +40,8 @@ class Settings(BaseSettings):
     AUTH_SECRET_KEY: str = envVariables("AUTH_SECRET_KEY", cast=str)
     ALGORITHM: str = envVariables("ALGORITHM", cast=str)
 
+    UCF_DOMAIN: str = "ucf.edu"
+
     class Config:
         env_file = ".env"
 

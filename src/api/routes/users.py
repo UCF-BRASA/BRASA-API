@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from core.config import settings
 from core.constants import SUCCESS
-from db.operations import add_student
+from db.operations import add_user
 
 # from models.base import Response
 from models.user import User, UserResponse
@@ -22,7 +22,7 @@ router: APIRouter = APIRouter(prefix="/users", tags=["Users"])
 )
 async def add(body: User):
     try:
-        new_user = await add_student(body)
+        new_user = await add_user(body)
 
         return UserResponse(
             status_code=status.HTTP_200_OK,

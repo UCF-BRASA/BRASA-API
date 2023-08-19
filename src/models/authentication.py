@@ -1,9 +1,9 @@
-# schemas.py
 from typing import Union
 
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated
 
+from models.base import Response
 from models.user import Gender, User
 
 
@@ -12,10 +12,23 @@ class AuthDetails(BaseModel):
     password: str
 
 
-class RegisterUserDetails(AuthDetails, User):
-    fullname: str
+class RegisterUserDetails(AuthDetails):
+    first_name: str
+    last_name: str
     date_of_birth: str
-    gender: Annotated[Union[Gender, None], Field(alias="Gender")] = None
+    gender: Annotated[Union[Gender, None], Field(alias="gender")] = None
     origin_city: str
     major: str
-    school_year: int
+    school_year: str
+
+
+class Token(BaseModel):
+    token: str
+
+
+class RegisterResponse(Response):
+    data: User | None
+
+
+class LoginResponse(Response):
+    data: Token | None
