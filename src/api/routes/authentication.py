@@ -1,5 +1,7 @@
+import json
 from datetime import datetime
 
+from bson import json_util
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from core.auth import AuthHandler, checkUCFEmail
@@ -9,9 +11,9 @@ from db.operations import add_user, find_user
 from models.authentication import (
     AuthDetails,
     LoginResponse,
+    LoginResponseModel,
     RegisterResponse,
     RegisterUserDetails,
-    Token,
 )
 from models.user import User, UsernameModel
 
@@ -79,14 +81,55 @@ async def login(auth_details: AuthDetails):
     # if all is good, get and return the JWT token
     token = auth_handler.encode_token(user["username"])
 
+    # loginResponse = JSONResponse({"message": "Login successful", "token": token})
+
+    # expires = datetime.today() - timedelta(hours=0, minutes=2)
+
+    # loginResponse.set_cookie(
+    #     key="jwt_token",
+    #     value=token,
+    #     secure=True,
+    #     httponly=True,
+    #     expires=expires.strftime("%H:%M:%S GMT"),
+    # )
+
+    # id = user["_id"]
+    # first_name = user["first_name"]
+    # last_name = user["last_name"]
+    # date_of_birth = user["date_of_birth"]
+    # gender = user["gender"]
+    # origin_city = user["origin_city"]
+    # major = user["major"]
+    # school_year = user["school_year"]
+
     return LoginResponse(
         status_code=status.HTTP_200_OK,
         response_type=SUCCESS,
-        description="Login successfully",
-        data=Token(token=token),
+        description="Login successful",
+        data=LoginResponseModel(
+            id=user["_id"],
+            token=token,
+            username=user["username"],
+            first_name=user["first_name"],
+            last_name=user["last_name"],
+            date_of_birth=user["date_of_birth"],
+            gender=user["gender"],
+            origin_city=user["origin_city"],
+            major=user["major"],
+            school_year=user["school_year"],
+        ),
     )
 
 
-@router.get("/protected")
-async def protected(username=Depends(auth_handler.auth_wrapper)):
-    return {"name": username}
+@router.get("/get_user_info")
+async def get_user_info(username=Depends(auth_handler.auth_wrapper)):
+    user = await find_user(UsernameModel(username=username))
+
+    first_name = user["first_name"]
+    last_name = user["last_name"]
+
+    return {"first_name": first_name, "last_name": last_name}
+
+
+def parse_json(data):
+    return json.loads(json_util.dumps(data))

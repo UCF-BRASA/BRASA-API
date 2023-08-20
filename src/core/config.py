@@ -39,8 +39,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     AUTH_SECRET_KEY: str = envVariables("AUTH_SECRET_KEY", cast=str)
     ALGORITHM: str = envVariables("ALGORITHM", cast=str)
-
-    UCF_DOMAIN: str = "ucf.edu"
+    CORS_ORIGNS: list = envVariables("CORS_ORIGNS", cast=list, default=["*"])
 
     class Config:
         env_file = ".env"
