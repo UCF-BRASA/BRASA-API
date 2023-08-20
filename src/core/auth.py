@@ -6,7 +6,6 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
 
 from core.config import settings
-from core.constants import UCF_DOMAIN
 
 
 class AuthHandler:
@@ -45,7 +44,7 @@ class AuthHandler:
 
 def checkUCFEmail(user_email) -> bool:
     domain = user_email.split("@")[1]
-    if domain == UCF_DOMAIN:
+    if domain == settings.UCF_DOMAIN:
         return True
 
     return False
