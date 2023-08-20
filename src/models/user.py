@@ -11,7 +11,7 @@ from models.base import Response
 
 
 class Gender(str, Enum):
-    men = "Men"
+    men = "Man"
     woman = "Woman"
     non_binary = "Non-binary"
     other = "Other"

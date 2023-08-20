@@ -6,3 +6,4 @@ SUCCESS: str = "success"
 # database related info
 MAIN_DB: str = "dev-web" if settings.DEBUG else "prod-web"
 USERS_COLLECTIONS: str = "brasa-users"
+UCF_DOMAIN: str = "ucf.edu"

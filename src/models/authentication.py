@@ -1,5 +1,6 @@
-from typing import Union
+from typing import Optional, Union
 
+from beanie import PydanticObjectId
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated
 
@@ -22,8 +23,17 @@ class RegisterUserDetails(AuthDetails):
     school_year: str
 
 
-class Token(BaseModel):
+class LoginResponseModel(BaseModel):
     token: str
+    id: Optional[PydanticObjectId]
+    username: str
+    first_name: str
+    last_name: str
+    date_of_birth: str
+    gender: str
+    origin_city: str
+    major: str
+    school_year: str
 
 
 class RegisterResponse(Response):
@@ -31,4 +41,4 @@ class RegisterResponse(Response):
 
 
 class LoginResponse(Response):
-    data: Token | None
+    data: LoginResponseModel | None
