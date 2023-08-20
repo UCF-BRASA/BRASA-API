@@ -1,5 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from api.routes.base import hello_world_router
 from api.routes.base import router as api_router
@@ -33,3 +34,23 @@ app: FastAPI = get_application()
 @app.on_event(event_type="startup")
 async def start_database():
     await initiate_database()
+
+
+# Allow these origins to access the API
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+    "https://localhost:3000",
+    "https://brasaucf.com/",
+    "https://brasa-web-ucf-brasa.vercel.app/",
+    "https://brasa-web-git-development-ucf-brasa.vercel.app/",
+]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
