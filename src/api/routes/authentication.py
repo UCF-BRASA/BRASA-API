@@ -54,6 +54,7 @@ async def login_for_access_token(
         value=f"Bearer {access_token}",
         httponly=True,
         secure=True,
+        samesite="none",
     )  # set HttpOnly cookie in response
 
     return Token(access_token=access_token, token_type="bearer")
