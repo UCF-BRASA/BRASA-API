@@ -1,9 +1,10 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from api.routes.base import hello_world_router
 from api.routes.base import router as api_router
-from core.config import settings
+from core.config import listifyCorsStr, settings
 from db.init_db import initiate_database
 
 
@@ -33,3 +34,12 @@ app: FastAPI = get_application()
 @app.on_event(event_type="startup")
 async def start_database():
     await initiate_database()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=listifyCorsStr(settings.CORS_ORIGINS),
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

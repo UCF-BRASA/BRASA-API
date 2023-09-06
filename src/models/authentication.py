@@ -1,5 +1,6 @@
-from typing import Union
+from typing import Optional, Union
 
+from beanie import PydanticObjectId
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated
 
@@ -13,17 +14,25 @@ class AuthDetails(BaseModel):
 
 
 class RegisterUserDetails(AuthDetails):
-    first_name: str
-    last_name: str
-    date_of_birth: str
+    firstName: str
+    lastName: str
+    dateOfBirth: str
     gender: Annotated[Union[Gender, None], Field(alias="gender")] = None
-    origin_city: str
+    originCity: str
     major: str
-    school_year: str
+    schoolYear: str
 
 
-class Token(BaseModel):
-    token: str
+class LoginResponseModel(BaseModel):
+    id: Optional[PydanticObjectId]
+    username: str  # this will be the user's email
+    firstName: str
+    lastName: str
+    dateOfBirth: str
+    gender: Annotated[Union[Gender, None], Field(alias="gender")] = None
+    originCity: str
+    major: str
+    schoolYear: str
 
 
 class RegisterResponse(Response):
@@ -31,4 +40,9 @@ class RegisterResponse(Response):
 
 
 class LoginResponse(Response):
-    data: Token | None
+    data: LoginResponseModel | None
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str

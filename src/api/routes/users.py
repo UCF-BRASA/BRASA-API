@@ -16,9 +16,9 @@ router: APIRouter = APIRouter(prefix="/users", tags=["Users"])
 
 
 @router.post(
-    path="/add",
+    path="/get_user_info",
     response_model=UserResponse,
-    name="Adds a user",
+    name="Gets user data, intended for startup or reload with cookie",
 )
 async def add(body: User):
     try:

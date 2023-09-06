@@ -1,28 +1,62 @@
-from datetime import datetime
+import json
+from datetime import datetime, timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, status
+import jwt
+from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi.security import OAuth2PasswordRequestForm
+from jose import JWTError
 
-from core.auth import AuthHandler, checkUCFEmail
+from core.auth import checkUCFEmail
 from core.config import settings
 from core.constants import SUCCESS
+from core.hashing import Hasher
+from core.security import create_access_token
 from db.operations import add_user, find_user
 from models.authentication import (
-    AuthDetails,
-    LoginResponse,
+    LoginResponseModel,
     RegisterResponse,
     RegisterUserDetails,
     Token,
 )
-from models.user import User, UsernameModel
+from models.user import User, UsernameModel, UserResponse
+
+from ..utils.OAuth2 import (
+    OAuth2PasswordBearerWithCookie,
+    authenticate_user,
+    get_current_user,
+)
 
 settings.app_tags_metadata.append(
     {"name": "Authentication", "description": "Authentication Routes"}
 )
 router = APIRouter(prefix="/auth", tags=["Authentication"])
-auth_handler = AuthHandler()
 
 
-@router.post("/register", status_code=201)
+@router.post("/token", response_model=Token)
+async def login_for_access_token(
+    response: Response,
+    form_data: OAuth2PasswordRequestForm = Depends(),
+):  # added response as a function parameter
+    user = await authenticate_user(
+        username=form_data.username, password=form_data.password
+    )
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+        )
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user["username"]}, expires_delta=access_token_expires
+    )
+    response.set_cookie(
+        key="access_token", value=f"Bearer {access_token}", httponly=True
+    )  # set HttpOnly cookie in response
+
+    return Token(access_token=access_token, token_type="bearer")
+
+
+@router.post("/register", response_model=RegisterResponse)
 async def register(user_details: RegisterUserDetails):
     brasa_member_status = False
 
@@ -35,21 +69,21 @@ async def register(user_details: RegisterUserDetails):
         brasa_member_status = True
 
     # hash user's password
-    hashed_password = auth_handler.get_password_hash(user_details.password)
+    hashed_password = Hasher.get_password_hash(user_details.password)
 
     # create new user with given info
     new_user = User(
         username=user_details.username,
         password=hashed_password,
-        first_name=user_details.first_name,
-        last_name=user_details.last_name,
-        date_of_birth=user_details.date_of_birth,
+        firstName=user_details.firstName,
+        lastName=user_details.lastName,
+        dateOfBirth=user_details.dateOfBirth,
         gender=user_details.gender,
-        origin_city=user_details.origin_city,
+        originCity=user_details.originCity,
         major=user_details.major,
-        school_year=user_details.school_year,
-        brasa_member=brasa_member_status,
-        created_at=datetime.utcnow(),
+        schoolYear=user_details.schoolYear,
+        isBrasaMember=brasa_member_status,
+        createdAt=datetime.utcnow(),
     )
 
     # create user on DB
@@ -66,27 +100,14 @@ async def register(user_details: RegisterUserDetails):
         return {"error": e}
 
 
-@router.post("/login")
-async def login(auth_details: AuthDetails):
-    user = await find_user(UsernameModel(username=auth_details.username))
-
-    # check if user exists and if password is correct
-    if (user is None) or (
-        not auth_handler.verify_password(auth_details.password, user["password"])
-    ):
-        raise HTTPException(status_code=401, detail="Invalid username and/or password")
-
-    # if all is good, get and return the JWT token
-    token = auth_handler.encode_token(user["username"])
-
-    return LoginResponse(
+@router.get("/user-profile", response_model=UserResponse)
+async def read_user_profile(current_user: User = Depends(get_current_user)):
+    """
+    Retrieve the user's profile data.
+    """
+    return UserResponse(
         status_code=status.HTTP_200_OK,
         response_type=SUCCESS,
-        description="Login successfully",
-        data=Token(token=token),
+        description="User acquired",
+        data=current_user,
     )
-
-
-@router.get("/protected")
-async def protected(username=Depends(auth_handler.auth_wrapper)):
-    return {"name": username}

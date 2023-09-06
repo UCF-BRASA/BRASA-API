@@ -11,7 +11,7 @@ from models.base import Response
 
 
 class Gender(str, Enum):
-    men = "Men"
+    men = "Man"
     woman = "Woman"
     non_binary = "Non-binary"
     other = "Other"
@@ -21,16 +21,16 @@ class Gender(str, Enum):
 class User(Document):
     username: str  # this will be the user's email
     password: str
-    first_name: str
-    last_name: str
-    date_of_birth: str
+    firstName: str
+    lastName: str
+    dateOfBirth: str
     gender: Annotated[Union[Gender, None], Field(alias="gender")] = None
-    origin_city: str
+    originCity: str
     major: str
-    school_year: str
-    brasa_member: bool = Field(default=False)
-    user_status: str = Field(default="active")
-    created_at: datetime
+    schoolYear: str
+    isBrasaMember: bool = Field(default=False)
+    userStatus: str = Field(default="active")
+    createdAt: datetime
 
     class Settings:
         # collection name

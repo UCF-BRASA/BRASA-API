@@ -6,6 +6,10 @@ from starlette.config import Config
 envVariables = Config(env_file=".env")
 
 
+def listifyCorsStr(cors_str) -> List[str]:
+    return cors_str.split(", ")
+
+
 class Settings(BaseSettings):
     # API routing prefix constants
     API_PREFIX: str = "/api"
@@ -39,8 +43,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     AUTH_SECRET_KEY: str = envVariables("AUTH_SECRET_KEY", cast=str)
     ALGORITHM: str = envVariables("ALGORITHM", cast=str)
-
-    UCF_DOMAIN: str = "ucf.edu"
+    CORS_ORIGINS: str = envVariables("CORS_ORIGINS", cast=str, default="")
 
     class Config:
         env_file = ".env"
